@@ -30,8 +30,10 @@ struct WeatherManager {
                     return
                 }
                 if let safeData = data {
-                    if let weather = self.parseJSON(safeData) {
-                        self.delegate?.didUpdateWeather(self, weather: weather)
+                    if let weatherModel = self.parseJSON(safeData) {
+                        DispatchQueue.main.async {
+                            self.delegate?.didUpdateWeather(self, weather: weatherModel)
+                        }
                     }
                 }
             }.resume()
@@ -43,11 +45,11 @@ struct WeatherManager {
         do {
             let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
             let id = decodedData.weather[0].id
-            let temp = decodedData.main.temp
-            let name = decodedData.name
+            let temperature = decodedData.main.temp
+            let cityName = decodedData.name
             
-            let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
-            return weather
+            let weatherModel = WeatherModel(conditionId: id, cityName: cityName, temperature: temperature)
+            return weatherModel
         } catch {
             delegate?.didFailWithError(error: error)
             return nil

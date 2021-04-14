@@ -21,7 +21,6 @@ class WeatherViewController: UIViewController {
         weatherManager.delegate = self
         searchTextField.delegate = self
     }
-
 }
 
 //MARK: - UITextFieldDelegate
@@ -46,7 +45,6 @@ extension WeatherViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
         if let city = searchTextField.text {
             weatherManager.fetchWeather(cityName: city)
         }
@@ -58,11 +56,9 @@ extension WeatherViewController: UITextFieldDelegate {
 extension WeatherViewController: WeatherManagerDelegate {
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
-        DispatchQueue.main.async {
-            self.temperatureLabel.text = weather.temperatureString
-            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
-            self.cityLabel.text = weather.cityName
-        }
+        self.temperatureLabel.text = weather.temperatureString
+        self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+        self.cityLabel.text = weather.cityName
     }
     
     func didFailWithError(error: Error) {
